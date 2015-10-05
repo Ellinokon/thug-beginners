@@ -282,10 +282,10 @@ main = hspec $ do
       property $ \(xs :: [Int]) (ys :: [Int]) -> B.appendFold xs ys == xs ++ ys
   describe "BreadButter.mapFold" $
     it "maps a function on an *arbitrary* list" $
-      property $ \(xs :: [Int]) -> B.mapList (odd . (* 6)) xs == map (odd . (* 6)) xs
+      property $ \(xs :: [Int]) -> B.mapFold (odd . (* 6)) xs == map (odd . (* 6)) xs
   describe "BreadButter.filterFold" $
     it "filters an *arbitrary* list on a predicate" $
-      property $ \(xs :: [Int]) -> B.filterList (> 5) xs == filter (> 5) xs
+      property $ \(xs :: [Int]) -> B.filterFold (> 5) xs == filter (> 5) xs
 
 toNat :: Int -> N.Nat
 toNat n | n > 0     = N.S (toNat (n - 1))
