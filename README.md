@@ -51,7 +51,7 @@ looking at the source code for the tests, or searching the Web for the exact
 solution to the problems presented.
 
 
-Presentations:
+Presentations:   
  LessonA: https://secure.plaimi.net/~alexander/tmp/2015-10-06-thug-beginners-1.html#10   
 
 Suggested material for after LessonA:   
