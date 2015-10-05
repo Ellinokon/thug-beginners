@@ -18,6 +18,7 @@ import Data.List
 
 import Test.Hspec
   (
+  Spec,
   describe,
   hspec,
   it,
@@ -26,6 +27,7 @@ import Test.Hspec
 import Test.QuickCheck
   (
   Arbitrary,
+  Property,
   arbitrary,
   arbitrarySizedNatural,
   choose,
@@ -37,38 +39,61 @@ import qualified A1Nat         as N
 import qualified A2List        as L
 import qualified A3BreadButter as B
 
+isInverseOf :: (Arbitrary a, Eq a, Show a) => (b -> a) -> (a -> b) -> Property
+isInverseOf f g = property $ \a -> f (g a) == a
+
+itIsAssociative :: (Arbitrary a, Eq a, Show a) => (a -> a -> a) -> Spec
+itIsAssociative f = it "is associative" $ property $ \a b c -> f (f a b) c == f a (f b c)
+
+itIsCommutative :: (Arbitrary a, Show a, Eq b) => (a -> a -> b) -> Spec
+itIsCommutative f = it "is commutative" $ property $ \a b -> f a b == f b a
+
+itIsInvolutory :: (Arbitrary a, Show a, Eq a) => (a -> a) -> Spec
+itIsInvolutory f = it "is involutory" $ f `isInverseOf` f
+
 main :: IO ()
 main = hspec $ do
-  describe "Nat.==" $
+  describe "Nat.==" $ do
     it "tests *arbitrary* Nats for equality" $
       property $ \x y -> (N.S x == N.S y) == (x == y)
+    itIsCommutative ((==) :: N.Nat -> N.Nat -> Bool)
   describe "Nat.isZ" $
     it "checks if *arbitrary* Nats are zero" $
       property $ \n -> N.isZ n == (n == N.Z)
-  describe "Nat.toNat" $
+  describe "Nat.toNat" $ do
     it "turs *arbitrary* Ints into Nats" $
       property $ \n -> N.toNat n == toNat n
+    it "is the inverse of Nat.fromNat" $
+      N.toNat `isInverseOf` N.fromNat
   describe "Nat.fromNat" $
     it "turs *arbitrary* Nats into Ints" $
       property $ \n -> N.fromNat (N.S n) == 1 + N.fromNat n
-  describe "Nat.predNat" $
+  describe "Nat.predNat" $ do
     it "preceed *arbitrary* Nats" $
       property $ \n -> N.predNat (N.S n) == n
+    it "is the inverse of Nat.succNat" $
+      N.predNat `isInverseOf` N.succNat
   describe "Nat.succNat" $
     it "succeed *arbitrary* Nats" $
       property $ \n -> N.succNat n == N.S n
-  describe "Nat.plus" $
+  describe "Nat.plus" $ do
     it "adds *arbitrary* Nats" $
       property $ \x y -> N.plus (N.S x) y == N.S (N.plus x y)
-  describe "Nat.times" $
+    itIsAssociative N.plus
+    itIsCommutative N.plus
+  describe "Nat.times" $ do
     it "multiplies *arbitrary* Nats" $
       property $ \x y -> N.times (N.S x) y == N.plus y (N.times x y)
+    itIsAssociative (\(Small x) (Small y) -> Small (N.times x y))
+    itIsCommutative N.times
   describe "Nat.powerOf" $
     it "raises *arbitrary* Nats to the power of *arbitrary* Nats" $
       property $ \b (Tiny e) -> N.powerOf b (N.S e) == N.times b (N.powerOf b e)
-  describe "Nat.minus" $
+  describe "Nat.minus" $ do
     it "subtracts *arbitrary* Nats" $
       property $ \x y -> N.minus (N.S x) (N.S y) == N.minus x y
+    it "is the inverse of Nat.plus" $
+      property $ \a -> (`N.minus` a) `isInverseOf` (`N.plus` a)
   describe "Nat.lteNat" $
     it "finds out if an *arbitrary* Nat is smaller than or equal to an *arbitrary* Nat" $
       property $ \x y -> N.lteNat (N.S x) (N.S y) == N.lteNat x y
@@ -81,12 +106,16 @@ main = hspec $ do
   describe "Nat.gtNat" $
     it "finds out if an *arbitrary* Nat is greater than an *arbitrary* Nat" $
       property $ \x y -> N.gtNat x y == N.ltNat y x
-  describe "Nat.minHat" $
+  describe "Nat.minNat" $ do
     it "finds out which out of two *arbitrary* Nats is the smaller" $
       property $ \x y -> N.minNat (N.S x) (N.S y) == N.S (N.minNat x y)
-  describe "Nat.maxNat" $
+    itIsAssociative N.minNat
+    itIsCommutative N.minNat
+  describe "Nat.maxNat" $ do
     it "finds out which out of two *arbitrary* Nats is the bigger" $
       property $ \x y -> N.maxNat (N.S x) (N.S y) == N.S (N.maxNat x y)
+    itIsAssociative N.maxNat
+    itIsCommutative N.maxNat
   describe "Nat.compare" $
     it "compares *arbitrary* Nats" $
       property $ \x y -> compare (N.S x) (N.S y) == compare x y
@@ -96,12 +125,13 @@ main = hspec $ do
   describe "Nat.fib" $
     it "calculates an *arbitrary* fibonacci sequence number" $
       property $ \(Small n) -> N.fib (N.S (N.S n)) == N.plus (N.fib (N.S n)) (N.fib n)
-  describe "List.append" $
+  describe "List.append" $ do
     it "appends *arbitrary* Lists" $
       property $ \(IntList xs) (IntList ys) -> L.append xs ys ==
         case xs of
           L.Nil       -> ys
           L.Cons z zs -> L.append (L.Cons z zs) ys
+    itIsAssociative (L.append :: L.List Int -> L.List Int -> L.List Int)
   describe "List.headList" $
     it "gets the head of an *arbitrary* List" $
       property $ \(IntList xs) -> L.headList xs ==
@@ -123,12 +153,14 @@ main = hspec $ do
           L.Cons y ys    -> L.Have (go y ys)
             where go _ L.Nil          = L.Nil
                   go z (L.Cons zz zs) = L.Cons z (go zz zs)
-  describe "List.unconsList" $
+  describe "List.unconsList" $ do
     it "unconses an *arbitrary* List" $
       property $ \(IntList xs) -> L.unconsList xs ==
         case xs of
           L.Nil          -> L.Nope
           L.Cons y ys    -> L.Have (y, ys)
+    it "is the inverse of List.Cons" $
+      ((\(L.Have x) -> x) . L.unconsList) `isInverseOf` (\(y, ys) -> L.Cons (y :: Int) ys)
   describe "List.nullList" $
     it "checks if an *arbitrary* List is null" $
       property $ \(IntList xs) -> L.nullList xs == (xs == L.Nil)
@@ -165,12 +197,13 @@ main = hspec $ do
   describe "List.splitList" $
     it "splits an *arbitrary* List on an *arbitrary* index" $
       property $ \n (IntList xs) -> L.splitList n xs == (L.takeList n xs, L.dropList n xs)
-  describe "List.reverseList" $
+  describe "List.reverseList" $ do
     it "reverses an *arbitrary* List" $
       property $ \(IntList xs) -> L.reverseList xs ==
         case xs of
           L.Nil       -> L.Nil
           L.Cons y ys -> L.append ys (L.Cons y L.Nil)
+    itIsInvolutory (L.reverseList :: L.List Int -> L.List Int)
   describe "List.intersperseList" $
     it "intersperses an *arbitrary* element to an *arbitrary* List" $
       property $ \x (IntList xs) -> L.intersperseList x xs ==
@@ -207,9 +240,10 @@ main = hspec $ do
   describe "BreadButter.add42List" $
     it "maps (+ 42) to an *arbitrary* list of Ints" $
       property $ \xs -> B.add42List xs == map (+ 42) xs
-  describe "BreadButter.invertBoolList" $
+  describe "BreadButter.invertBoolList" $ do
     it "inverts an arbitrary list of Booleans" $
       property $ \xs -> B.invertBoolList xs == map not xs
+    itIsInvolutory B.invertBoolList
   describe "BreadButter.geq42List" $
     it "filters an *arbitrary* list of Ints for any Int >42" $
       property $ \xs -> B.geq42List xs == filter (> 42) xs
@@ -257,12 +291,12 @@ toNat :: Int -> N.Nat
 toNat n | n > 0     = N.S (toNat (n - 1))
         | otherwise = N.Z
 
-newtype TinyNats   = Tiny N.Nat                        deriving Show
-newtype SmallNats  = Small N.Nat                       deriving Show
-newtype IntList    = IntList     (L.List Int)          deriving Show
-newtype IntIntList = IntListList (L.List (L.List Int)) deriving Show
-newtype TinyList   = TinyList    (L.List N.Nat)        deriving Show
-newtype SmallList  = SmallList   (L.List N.Nat)        deriving Show
+newtype TinyNats   = Tiny N.Nat                        deriving (Eq, Show)
+newtype SmallNats  = Small N.Nat                       deriving (Eq, Show)
+newtype IntList    = IntList     (L.List Int)          deriving (Eq, Show)
+newtype IntIntList = IntListList (L.List (L.List Int)) deriving (Eq, Show)
+newtype TinyList   = TinyList    (L.List N.Nat)        deriving (Eq, Show)
+newtype SmallList  = SmallList   (L.List N.Nat)        deriving (Eq, Show)
 
 instance Arbitrary N.Nat where
   arbitrary = toNat <$> arbitrarySizedNatural
