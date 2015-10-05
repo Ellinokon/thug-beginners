@@ -58,7 +58,7 @@ main = hspec $ do
       property $ \n -> N.fromNat (N.S n) == 1 + N.fromNat n
   describe "Nat.predNat" $
     it "preceed *arbitrary* Nats" $
-      property $ \n -> N.predNat (N.S n) == N.predNat n
+      property $ \n -> N.predNat (N.S n) == n
   describe "Nat.succNat" $
     it "succeed *arbitrary* Nats" $
       property $ \n -> N.succNat n == N.S n
