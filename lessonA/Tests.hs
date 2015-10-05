@@ -61,12 +61,12 @@ main = hspec $ do
     it "checks if *arbitrary* Nats are zero" $
       property $ \n -> N.isZ n == (n == N.Z)
   describe "Nat.toNat" $ do
-    it "turs *arbitrary* Ints into Nats" $
+    it "turns *arbitrary* Ints into Nats" $
       property $ \n -> N.toNat n == toNat n
     it "is the inverse of Nat.fromNat" $
       N.toNat `isInverseOf` N.fromNat
   describe "Nat.fromNat" $
-    it "turs *arbitrary* Nats into Ints" $
+    it "turns *arbitrary* Nats into Ints" $
       property $ \n -> N.fromNat (N.S n) == 1 + N.fromNat n
   describe "Nat.predNat" $ do
     it "preceed *arbitrary* Nats" $
