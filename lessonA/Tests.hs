@@ -42,9 +42,6 @@ main = hspec $ do
   describe "Nat.==" $
     it "tests *arbitrary* Nats for equality" $
       property $ \x y -> (N.S x == N.S y) == (x == y)
-  describe "Nat.compare" $
-    it "compares *arbitrary* Nats" $
-      property $ \x y -> compare (N.S x) (N.S y) == compare x y
   describe "Nat.isZ" $
     it "checks if *arbitrary* Nats are zero" $
       property $ \n -> N.isZ n == (n == N.Z)
@@ -90,6 +87,9 @@ main = hspec $ do
   describe "Nat.maxNat" $
     it "finds out which out of two *arbitrary* Nats is the bigger" $
       property $ \x y -> N.maxNat (N.S x) (N.S y) == N.S (N.maxNat x y)
+  describe "Nat.compare" $
+    it "compares *arbitrary* Nats" $
+      property $ \x y -> compare (N.S x) (N.S y) == compare x y
   describe "Nat.fact" $
     it "calculates an *arbitrary* factorial" $
       property $ \(Small n) -> N.fact (N.S n) == N.times (N.S n) (N.fact n)
