@@ -152,7 +152,7 @@ letterT = undefined
 -- with the new value and the next element. And so on. Let's look at fold.
 fold :: (a -> b -> b) -> b -> [a] -> b
 fold _ z []     =  z
-fold f z (x:xs) =  f x (foldr f z xs)
+fold f z (x:xs) =  f x (fold f z xs)
 
 -- That's it. As you may have observed, this is the simple "recurse to
 -- basecase" pattern once more! append, lengthList, sumList, reverselist,
