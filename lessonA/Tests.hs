@@ -202,7 +202,7 @@ main = hspec $ do
       property $ \(IntList xs) -> L.reverseList xs ==
         case xs of
           L.Nil       -> L.Nil
-          L.Cons y ys -> L.append ys (L.Cons y L.Nil)
+          L.Cons y ys -> L.append (L.reverseList ys) (L.Cons y L.Nil)
     itIsInvolutory (L.reverseList :: L.List Int -> L.List Int)
   describe "List.intersperseList" $
     it "intersperses an *arbitrary* element to an *arbitrary* List" $
