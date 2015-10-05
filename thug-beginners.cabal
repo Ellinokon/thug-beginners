@@ -1,5 +1,5 @@
 name:                  THUG-Beginners
-version:               1.0.0
+version:               0.1.0
 synopsis:              THUG Beginners' Workshoppe exercises.
 description:           Exercises for the Trondheim Haskell Users' Group's
                        beginners' workshoppe.
