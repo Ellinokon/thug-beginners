@@ -132,12 +132,6 @@ main = hspec $ do
   describe "List.nullList" $
     it "checks if an *arbitrary* List is null" $
       property $ \(IntList xs) -> L.nullList xs == (xs == L.Nil)
-  describe "List.lengthList" $
-    it "calculates the length of an *arbitrary* List" $
-      property $ \(IntList xs) -> L.lengthList xs ==
-        case xs of
-          L.Nil       -> N.Z
-          L.Cons _ ys -> N.plus (N.S N.Z) (L.lengthList ys)
   describe "List.sumList" $
     it "sums an *arbitrary* List of Nats" $
       property $ \xs -> L.sumList xs ==
