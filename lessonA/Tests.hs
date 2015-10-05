@@ -50,9 +50,7 @@ main = hspec $ do
       property $ \n -> N.isZ n == (n == N.Z)
   describe "Nat.toNat" $
     it "turs *arbitrary* Ints into Nats" $
-      property $ \n -> N.toNat n == (if n > 0
-                                       then N.S (N.toNat (n - 1))
-                                       else N.Z)
+      property $ \n -> N.toNat n == toNat n
   describe "Nat.fromNat" $
     it "turs *arbitrary* Nats into Ints" $
       property $ \n -> N.fromNat (N.S n) == 1 + N.fromNat n
@@ -261,6 +259,10 @@ main = hspec $ do
     it "filters an *arbitrary* list on a predicate" $
       property $ \(xs :: [Int]) -> B.filterList (> 5) xs == filter (> 5) xs
 
+toNat :: Int -> N.Nat
+toNat n | n > 0     = N.S (toNat (n - 1))
+        | otherwise = N.Z
+
 newtype TinyNats   = Tiny N.Nat                        deriving Show
 newtype SmallNats  = Small N.Nat                       deriving Show
 newtype IntList    = IntList     (L.List Int)          deriving Show
@@ -269,13 +271,13 @@ newtype TinyList   = TinyList    (L.List N.Nat)        deriving Show
 newtype SmallList  = SmallList   (L.List N.Nat)        deriving Show
 
 instance Arbitrary N.Nat where
-  arbitrary = N.toNat <$> arbitrarySizedNatural
+  arbitrary = toNat <$> arbitrarySizedNatural
 
 instance Arbitrary (TinyNats) where
-  arbitrary = Tiny . N.toNat <$> choose (0, 3)
+  arbitrary = Tiny . toNat <$> choose (0, 3)
 
 instance Arbitrary (SmallNats) where
-  arbitrary = Small . N.toNat <$> choose (0, 9)
+  arbitrary = Small . toNat <$> choose (0, 9)
 
 instance (Arbitrary a) => Arbitrary (L.List a) where
   arbitrary = (foldr L.Cons L.Nil :: [a] -> L.List a) <$> arbitrary
@@ -287,7 +289,7 @@ instance Arbitrary IntIntList where
   arbitrary = IntListList <$> arbitrary
 
 instance Arbitrary TinyList where
-  arbitrary = TinyList . foldr L.Cons L.Nil <$> listOf (N.toNat <$> choose (0, 3))
+  arbitrary = TinyList . foldr L.Cons L.Nil <$> listOf (toNat <$> choose (0, 3))
 
 instance Arbitrary SmallList where
-  arbitrary = SmallList . foldr L.Cons L.Nil <$> listOf (N.toNat <$> choose (0, 3))
+  arbitrary = SmallList . foldr L.Cons L.Nil <$> listOf (toNat <$> choose (0, 3))
