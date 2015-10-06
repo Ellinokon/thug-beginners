@@ -28,6 +28,7 @@ import Test.QuickCheck
   (
   Arbitrary,
   Property,
+  (==>),
   arbitrary,
   arbitrarySizedNatural,
   choose,
@@ -51,12 +52,22 @@ itIsCommutative f = it "is commutative" $ property $ \a b -> f a b == f b a
 itIsInvolutory :: (Arbitrary a, Show a, Eq a) => (a -> a) -> Spec
 itIsInvolutory f = it "is involutory" $ f `isInverseOf` f
 
+itIsIrreflective :: (Arbitrary a, Show a) => (a -> a -> Bool) -> Spec
+itIsIrreflective f = it "is irreflective" $ property $ \a -> not $ f a a
+
+itIsReflective :: (Arbitrary a, Show a) => (a -> a -> Bool) -> Spec
+itIsReflective f = it "is reflective" $ property $ \a -> f a a
+
+itIsTransitive :: (Arbitrary a, Show a) => (a -> a -> Bool) -> Spec
+itIsTransitive f = it "is transitive" $ property $ \a b c -> f a b && f b c ==> f a c
+
 main :: IO ()
 main = hspec $ do
   describe "Nat.==" $ do
     it "tests *arbitrary* Nats for equality" $
       property $ \x y -> (N.S x == N.S y) == (x == y)
     itIsCommutative ((==) :: N.Nat -> N.Nat -> Bool)
+    itIsReflective ((==) :: N.Nat -> N.Nat -> Bool)
   describe "Nat.isZ" $
     it "checks if *arbitrary* Nats are zero" $
       property $ \n -> N.isZ n == (n == N.Z)
@@ -94,18 +105,26 @@ main = hspec $ do
       property $ \x y -> N.minus (N.S x) (N.S y) == N.minus x y
     it "is the inverse of Nat.plus" $
       property $ \a -> (`N.minus` a) `isInverseOf` (`N.plus` a)
-  describe "Nat.lteNat" $
+  describe "Nat.lteNat" $ do
     it "finds out if an *arbitrary* Nat is smaller than or equal to an *arbitrary* Nat" $
       property $ \x y -> N.lteNat (N.S x) (N.S y) == N.lteNat x y
-  describe "Nat.ltNat" $
+    itIsReflective N.lteNat
+    itIsTransitive N.lteNat
+  describe "Nat.ltNat" $ do
     it "finds out if an *arbitrary* Nat is smaller than an *arbitrary* Nat" $
       property $ \x y -> N.ltNat x y == N.lteNat (N.S x) y
-  describe "Nat.gteNat" $
+    itIsIrreflective N.ltNat
+    itIsTransitive N.ltNat
+  describe "Nat.gteNat" $ do
     it "finds out if an *arbitrary* Nat is larger than or equal to an *arbitrary* Nat" $
       property $ \x y -> N.gteNat x y == N.lteNat y x
-  describe "Nat.gtNat" $
+    itIsReflective N.gteNat
+    itIsTransitive N.gteNat
+  describe "Nat.gtNat" $ do
     it "finds out if an *arbitrary* Nat is greater than an *arbitrary* Nat" $
       property $ \x y -> N.gtNat x y == N.ltNat y x
+    itIsIrreflective N.gtNat
+    itIsTransitive N.gtNat
   describe "Nat.minNat" $ do
     it "finds out which out of two *arbitrary* Nats is the smaller" $
       property $ \x y -> N.minNat x (N.plus x y) == x
