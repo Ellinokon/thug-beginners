@@ -132,7 +132,8 @@ initList :: List a -> Perhaps (List a)
 -- Now for the rest. I'll give you most of it, but not the main bit. That's
 -- for you to figure out!
 initList Nil            = Nope
-initList (x `Cons` Nil) = Nope
+initList (x `Cons` Nil) = Nope -- N.B. like "tail", init doesn't work with
+                               -- one-member lists
 initList (x `Cons` xs)  = Have (go x xs)
   -- Here we're doing something we haven't done before. The "where" keyword
   -- lets us define some local values or functions that are only in scope
