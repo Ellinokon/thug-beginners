@@ -69,8 +69,8 @@ infixr 5 `Cons`
 append :: List a -> List a -> List a
 -- First off we want to be able to concatenate two Lists. This function should
 -- add the two lists together, the right one at the end of the left one.
-(x `Cons` xs) `append` ys = undefined
 Nil           `append` ys = undefined
+(x `Cons` xs) `append` ys = undefined
 
 -- You see how we use the pattern of x `Cons` xs a lot? We call x the head,
 -- and xs the tail. This operation is not entirely safe. Try doing this in
