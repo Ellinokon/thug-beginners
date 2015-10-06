@@ -99,7 +99,7 @@ main = hspec $ do
     itIsCommutative N.times
   describe "Nat.powerOf" $
     it "raises *arbitrary* Nats to the power of *arbitrary* Nats" $
-      property $ \b (Tiny e) -> N.powerOf b (N.S e) == N.times b (N.powerOf b e)
+      property $ \(Small b) (Tiny e) -> N.powerOf b (N.S e) == N.times b (N.powerOf b e)
   describe "Nat.minus" $ do
     it "subtracts *arbitrary* Nats" $
       property $ \x y -> N.minus (N.S x) (N.S y) == N.minus x y
@@ -140,7 +140,7 @@ main = hspec $ do
       property $ \x y -> compare (N.S x) (N.S y) == compare x y
   describe "Nat.fact" $
     it "calculates an *arbitrary* factorial" $
-      property $ \(Small n) -> N.fact (N.S n) == N.times (N.S n) (N.fact n)
+      property $ \(Tiny n) -> N.fact (N.S n) == N.times (N.S n) (N.fact n)
   describe "Nat.fib" $
     it "calculates an *arbitrary* fibonacci sequence number" $
       property $ \(Small n) -> N.fib (N.S (N.S n)) == N.plus (N.fib (N.S n)) (N.fib n)
