@@ -98,13 +98,13 @@ data Perhaps a = Nope   -- Means we don't have anything. Nope   :: Perhaps a
 headList :: List a -> Perhaps a
 -- Write a safe version of the h function we saw above, that indicates whether
 -- we Have something or Nope.
-headList (x `Cons` xs) = undefined
 headList Nil           = undefined
+headList (x `Cons` xs) = undefined
 
 tailList :: List a -> Perhaps (List a)
 -- Now write the opposite function, give us the tail instead of the head.
-tailList (x `Cons` xs) = undefined
 tailList Nil           = undefined
+tailList (x `Cons` xs) = undefined
 
 lastList :: List a -> Perhaps a
 -- Let's turn the concepts around. That's a bit more tricky. Instead of the
