@@ -259,9 +259,6 @@ main = hspec $ do
   describe "BreadButter.intersperse0" $
     it "intersperses 0 to an *arbitrary* list of Ints" $
       property $ \xs -> B.intersperse0 xs == intersperse 0 xs
-  describe "BreadButter.notElemList" $
-    it "checks if an *arbitrary* element is not in an *arbitrary* list" $
-      property $ \x (xs :: [Int]) -> B.notElemList x xs == notElem x xs
   describe "BreadButter.take4intersperse0" $
     it "takes 4 elements from the head of an *arbitrary* list of Ints, then intersperses 0 to the resulting list" $
       property $ \xs -> B.take4intersperse0 xs == (take 4 . intersperse 0 $ xs)
@@ -271,6 +268,9 @@ main = hspec $ do
   describe "BreadButter.letterT" $
     it "filters out any value that is not 't' or 'T' from an *arbitrary* String" $
       property $ \xs -> B.letterT xs == (filter (== 't') . filter (== 'T') $ xs)
+  describe "BreadButter.notElemList" $
+    it "checks if an *arbitrary* element is not in an *arbitrary* list" $
+      property $ \x (xs :: [Int]) -> B.notElemList x xs == notElem x xs
   describe "BreadButter.lengthFold" $
     it "calculates the length of an *arbitrary* list" $
       property $ \(xs :: [Int]) -> B.lengthFold xs == length xs

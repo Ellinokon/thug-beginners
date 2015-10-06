@@ -112,14 +112,6 @@ intersperse0 :: [Int] -> [Int]
 -- function, which is like our intersperseList.
 intersperse0 = undefined
 
-notElemList :: (Eq a) => a -> [a] -> Bool
--- Remember our elemList? Now write notElemList, using the builtin lists and
--- the "elem" and "not" functions. elem is like our elemLists.
---   not :: Bool -> Bool
---   not True  = False
---   not False = True
-notElemList = undefined
-
 -- That was simple enough. Now composition. We can compose functions together
 -- to get a new function. This is one of the most important things in all of
 -- functional programming. In Haskell the compose function is:
@@ -143,6 +135,14 @@ letterT :: String -> String
 -- strings with "s.
 --   "Hallo!" == 'H' : 'A' : 'L' : 'L' : 'O' : '!' : []
 letterT = undefined
+
+notElemList :: (Eq a) => a -> [a] -> Bool
+-- Remember our elemList? Now write notElemList, using the builtin lists and
+-- the "elem" and "not" functions. elem is like our elemLists.
+--   not :: Bool -> Bool
+--   not True  = False
+--   not False = True
+notElemList = undefined
 
 -- And, now, finally. For the delicious brunost. Folding is reducing a list
 -- while applying a binary function to every member. It's pretty simple,
