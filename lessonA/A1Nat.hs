@@ -216,7 +216,7 @@ instance Ord Nat where
 
 fact :: Nat -> Nat
 -- Let's do a couple more. First the factorial. The factorial is the product
--- of all the numbers less than the argument.
+-- of all the numbers less than the argument, and the number itself.
 --
 --   fact (S (S (S Z))) = S (S (S (S (S (S Z)))))
 -- Or, if we used Ints it would look like this.
