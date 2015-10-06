@@ -119,7 +119,8 @@ intersperse0 = undefined
 --   (f . g) x = f (g x)
 -- The concept is very simple. Apply one, then the other. We can partially
 -- apply this to get new functions. "f . g" is a new function that takes an
--- argument "x". Let's practice this a bit too.
+-- argument "x". Let's practice this a bit too. Note that you can (and
+-- probably should) combine composing with partial application!
 
 take4intersperse0 :: [Int] -> [Int]
 -- Yup, you guessed it. intersperse the list with 0, then take the first four.
