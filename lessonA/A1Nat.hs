@@ -154,8 +154,8 @@ Z     `times` _ = undefined
 
 powerOf :: Nat -> Nat -> Nat
 -- Power of. The first argument is the base case, the second is the exponent.
-powerOf _ Z     = undefined
-powerOf b (S e) = undefined
+_ `powerOf` Z     = undefined
+b `powerOf` (S e) = undefined
 
 minus :: Nat -> Nat -> Nat
 -- Subtraction.
