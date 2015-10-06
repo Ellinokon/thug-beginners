@@ -172,7 +172,7 @@ x     `lteNat` Z     = undefined
 (S x) `lteNat` (S y) = undefined
 
 ltNat :: Nat -> Nat -> Bool
--- The less-than function. Hint: You probably want to use lteNat and succ...
+-- The less-than function. Hint: You probably want to use lteNat and succNat.
 ltNat x y = undefined
 
 gteNat :: Nat -> Nat -> Bool
