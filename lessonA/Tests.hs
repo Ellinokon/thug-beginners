@@ -108,12 +108,12 @@ main = hspec $ do
       property $ \x y -> N.gtNat x y == N.ltNat y x
   describe "Nat.minNat" $ do
     it "finds out which out of two *arbitrary* Nats is the smaller" $
-      property $ \x y -> N.minNat (N.S x) (N.S y) == N.S (N.minNat x y)
+      property $ \x y -> N.minNat x (N.plus x y) == x
     itIsAssociative N.minNat
     itIsCommutative N.minNat
   describe "Nat.maxNat" $ do
     it "finds out which out of two *arbitrary* Nats is the bigger" $
-      property $ \x y -> N.maxNat (N.S x) (N.S y) == N.S (N.maxNat x y)
+      property $ \x y -> N.maxNat x (N.plus x y) == N.plus x y
     itIsAssociative N.maxNat
     itIsCommutative N.maxNat
   describe "Nat.compare" $
