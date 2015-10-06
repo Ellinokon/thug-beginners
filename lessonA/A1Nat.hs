@@ -221,7 +221,7 @@ fact :: Nat -> Nat
 --   fact (S (S (S Z))) = S (S (S (S (S (S Z)))))
 -- Or, if we used Ints it would look like this.
 --   fact 3 = 6
--- Because 1 + 2 + 3 = 6. Get it? Good. Now implement it!
+-- Because 1 * 2 * 3 = 6. Get it? Good. Now implement it!
 fact Z     = undefined
 fact (S n) = undefined
 
