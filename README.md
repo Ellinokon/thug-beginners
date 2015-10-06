@@ -64,7 +64,7 @@ solution to the problems presented.
 
 
 Presentations:   
- LessonA: https://secure.plaimi.net/~alexander/tmp/2015-10-06-thug-beginners-1.html#10   
+ LessonA: https://secure.plaimi.net/~alexander/tmp/2015-10-06-thug-beginners-1.html   
 
 Suggested material for after LessonA:   
  https://www.youtube.com/watch?v=3bjXGrycMhQ   
