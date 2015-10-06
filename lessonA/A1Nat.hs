@@ -159,9 +159,9 @@ powerOf b (S e) = undefined
 
 minus :: Nat -> Nat -> Nat
 -- Subtraction.
-Z     `minus` _ = undefined
-x     `minus` Z = undefined
-(S x) `minus` y = undefined
+Z     `minus` _     = undefined
+x     `minus` Z     = undefined
+(S x) `minus` (S y) = undefined
 
 lteNat :: Nat -> Nat -> Bool
 -- Moving onto ordering. This is the less-than-or-equal-to function for Nats.
