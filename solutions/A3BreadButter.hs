@@ -7,7 +7,7 @@ import Data.List
 
 mapList :: (a -> b) -> [a] -> [b]
 mapList _ []     = []
-mapList f (x:xs) = f x : map f xs
+mapList f (x:xs) = f x : mapList f xs
 
 filterList :: (a -> Bool) -> [a] -> [a]
 filterList _ []     = []
