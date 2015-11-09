@@ -11,7 +11,7 @@ infixr 5 `Cons`
 
 append :: List a -> List a -> List a
 Nil           `append` ys = ys
-(x `Cons` xs) `append` ys = x `Cons` xs `append` ys
+(x `Cons` xs) `append` ys = x `Cons` (xs `append` ys)
 
 data Perhaps a = Nope
                | Have a
