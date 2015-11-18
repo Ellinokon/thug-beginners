@@ -72,3 +72,10 @@ Suggested material for after LessonA:
  http://learnyouahaskell.com/starting-out   
  http://learnyouahaskell.com/syntax-in-functions   
  http://www.haskellforall.com/2013/12/equational-reasoning.html
+
+Suggested material for after LessonB:
+ https://wiki.haskell.org/Typeclassopedia
+ http://blog.sigfpe.com/2006/08/you-could-have-invented-monads-and.html
+ http://www.cs.nott.ac.uk/~gmh/fold.pdf
+ http://202.3.77.10/users/karkare/courses/2010/cs653/Papers/ad-hoc-polymorphism.pdf
+ http://ipaper.googlecode.com/git-history/8070869c59470de474515000e3af74f8958b2161/John-Hughes/The%20Computer%20Journal-1989-Hughes-98-107.pdf
