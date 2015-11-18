@@ -14,6 +14,9 @@ cabal-version:         >=1.10
 
 executable a
   main-is:             Tests.hs
+  exposed-modules:     A1Nat
+                       A2List
+                       A3BreadButter
   build-depends:       base >=4.8 && <4.9,
                        hspec >=2.1 && <2.3,
                        QuickCheck >=2.6 && <2.9,
