@@ -66,7 +66,7 @@ Just a  `appendMaybe` Just b  = undefined
 --   (a <> b) <> c == a <> (b <> c)
 --
 -- Some trivial examples of semigroups include integers under addition or
--- multiplication.
+-- multiplication. Another nice semigroup is... lists under appending!
 --
 -- Now let's look at the class.
 class SemiGroup a where
