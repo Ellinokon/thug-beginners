@@ -52,6 +52,10 @@ instance Foldable Tree where
 --
 -- We could also have made Tree a Foldable via foldr. It's a bit more
 -- difficult. Exercise: Write foldr for Foldable Tree.
+--
+-- It is worth mentioning that you actually get a bunch of functions for free
+-- with your Foldable instance. See:
+--   https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Foldable.html
 
 -- Now let's do some exercises using Foldable. Verify them in GHCi using your
 -- Foldable Tree.
