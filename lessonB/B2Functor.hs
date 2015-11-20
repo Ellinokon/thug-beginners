@@ -22,7 +22,7 @@ import Data.Monoid
 -- consider this data type:
 data Tree a = Empty
             | Node (Tree a) a (Tree a)
-            deriving Show
+            deriving (Eq, Show)
 
 mapTree :: (a -> b) -> Tree a -> Tree b
 -- How do we map stuff here?
@@ -66,7 +66,7 @@ instance Functor Tree where
 -- (<$>) is infix fmap.
 
 -- Just a pair of *something*.
-data Pair a = P a a deriving Show
+data Pair a = P a a deriving (Show, Eq)
 
 instance Functor Pair where
   -- Implement an fmap that applies f to both members of the Pair.
@@ -82,7 +82,7 @@ instance Functor Perhaps where
   fmap = undefined
 
 -- The composition of two higher kinded types on a type.
-data Composition f g x = Compose (f (g x)) deriving Show
+data Composition f g x = Compose (f (g x)) deriving (Show, Eq)
 
 instance (Functor f, Functor g) => Functor (Composition f g) where
   -- The composition of two Functors. E.g. Maybe [a], or [Maybe a]. HINT: Read
@@ -224,7 +224,7 @@ instance Applicative Tree where
 -- way. Thankfully that problem is easily overcome by using a wrapper data
 -- type.
 
-data ZipList a = Z [a] deriving Show
+data ZipList a = Z [a] deriving (Show, Eq)
 
 instance Functor ZipList where
   -- First we need to make it a Functor. Go ahead and do that. It's just like
@@ -249,7 +249,7 @@ instance Applicative ZipList where
 data NonDetermTree a = EmptyND
                      | Leaf a
                      | Branch (NonDetermTree a) (NonDetermTree a)
-                     deriving Show
+                     deriving (Show, Eq)
 
 instance Functor NonDetermTree where
   -- First, let's make it a Functor.
