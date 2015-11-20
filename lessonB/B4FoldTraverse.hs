@@ -50,8 +50,8 @@ instance Foldable Tree where
 -- Have you spotted the relationship between foldMap and fold? Exercise:
 -- express fold using id.
 --
--- We could also have made Tree a Foldable via foldr. Exercise: Write foldr
--- for Foldable Tree.
+-- We could also have made Tree a Foldable via foldr. It's a bit more
+-- difficult. Exercise: Write foldr for Foldable Tree.
 
 -- Now let's do some exercises using Foldable. Verify them in GHCi using your
 -- Foldable Tree.
