@@ -34,6 +34,13 @@ instance Foldable Tree where
   -- that converts data to a Monoid, as well as the data (in some
   -- computational context) that it is to convert. So the empty value becomes
   -- mempty, and if there are multiple values they are combined with (<>).
+  --
+  -- An example function would be the Sum data constructor, which is a -> Sum
+  -- a. Sum is a Monoid. You can import it in GHCi with Data.Monoid and play
+  -- with it.
+  --
+  -- Exercise: What does foldMap Sum do? What about
+  -- foldMap (\a -> (Sum 1, Sum a, Sum  -- (a*a)))?
   foldMap f Empty        = undefined
   foldMap f (Node l x r) = undefined
 
