@@ -102,5 +102,12 @@ instance Traversable Tree where
 -- into a Tree (Maybe a) and vice versa. Play around with similar context
 -- commuting.
 
+-- What is the significance of the Applicative nature of traverse, when
+-- compared to fmap? Exercise: Given the following function:
+--   f x | even x    = Just (x * 2)
+--       | otherwise = Nothing
+-- What happens if you fmap it to [1, 2, 3, 4]? What about when you traverse
+-- the same list with it? What about the list [2, 4, 6, 8]?
+
 -- Do you see what sequenceA is to traverse? It is similar to the relationship
 -- between fold to foldMap. Exercise: What is sequenceA in terms of id?
