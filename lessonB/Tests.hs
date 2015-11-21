@@ -136,6 +136,12 @@ main = hspec $ do
   describe "Functor.fmap (NonDetermTree)" $
     it "fmaps a function on an *arbitrary* NonDetermTree" $
       property $ \(IntNonDetermTree a) -> correctNonDetermTree (mapF <$> a) == (mapF <$> correctNonDetermTree a)
+  describe "Functor.pure & Functor.(<*>) (ZipList)" $
+    it "aps a function on an *arbitrary* pure ZipList" $
+      property $ \(IntZipList a) -> correctZipList (pure mapF <*> a) == (pure mapF <*> correctZipList a)
+  describe "Functor.pure & Functor.(<*>) (NonDetermTree)" $
+    it "aps a function on an *arbitrary* pure NonDetermTree" $
+      property $ \(IntNonDetermTree a) -> correctNonDetermTree (pure mapF <*> a) == (pure mapF <*> correctNonDetermTree a)
   describe "FoldTraverse.foldMap" $
     it "foldMaps an *arbitrary* Tree" $
       property $ \(IntTree a) -> foldMap Sum a == foldMap Sum (correctTree a)
@@ -169,11 +175,22 @@ data Composition f g x = Compose (f (g x))
   deriving (Eq, Foldable, Functor, Show)
 
 data ZipList a = Z [a] deriving (Eq, Foldable, Functor, Show, Traversable)
+instance Applicative ZipList where
+  pure x            = Z (repeat x)
+  (Z fs) <*> (Z xs) = Z (zipWith id fs xs)
+
 
 data NonDetermTree a = EmptyND
                      | Leaf a
                      | Branch (NonDetermTree a) (NonDetermTree a)
                deriving (Eq, Foldable, Functor, Show, Traversable)
+instance Applicative NonDetermTree where
+  pure                = Leaf
+  EmptyND <*> _       = EmptyND
+  _       <*> EmptyND = EmptyND
+  Leaf f <*> t        = fmap f t
+  (Branch l r) <*> t  = Branch (l <*> t) (r <*> t)
+
 
 correctTree :: F.Tree a -> Tree a
 correctTree F.Empty        = Empty
