@@ -102,7 +102,6 @@ instance Monad NonDetermTree where
   Leaf x       >>= f = undefined
   (Branch l r) >>= f = undefined
 
-
 -- Now that you have thought long and hard about Monads, let me explain list
 -- comprehensions, like I said I would. OK. So you have:
 --   [x * 2 | x <- [1, 2, 3, 4]] == [2, 4, 6, 8]

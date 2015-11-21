@@ -82,16 +82,16 @@ instance SemiGroup (List a) where
 instance SemiGroup [a] where
   (<>) = (++)
 
--- Now *you* make Perhaps a SemiGroup. This will look essentially like the
--- append functions you wrote for Perhaps earlier, except now you have the
--- polymorphic (<>) function at your disposal!
 instance SemiGroup a => SemiGroup (Perhaps a) where
+  -- Now *you* make Perhaps a SemiGroup. This will look essentially like the
+  -- append functions you wrote for Perhaps earlier, except now you have the
+  -- polymorphic (<>) function at your disposal!
   p      <> Nope   = undefined
   Nope   <> p      = undefined
   Have p <> Have q = undefined
 
--- Do the same for Maybe.
 instance SemiGroup a => SemiGroup (Maybe a) where
+  -- Do the same for Maybe.
   p       <> Nothing = undefined
   Nothing <> p       = undefined
   Just p  <> Just q  = undefined
