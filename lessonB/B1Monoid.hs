@@ -111,6 +111,8 @@ instance SemiGroup a => SemiGroup (Maybe a) where
 -- operator, is effectively the identity function.
 --   e <> x == id x
 --
+-- Thus, monoids are sometimes simply called "semigroups with identity".
+--
 -- A proper monoid must satisfy three laws:
 --   e <> x        = x
 --   x <> e        = x
