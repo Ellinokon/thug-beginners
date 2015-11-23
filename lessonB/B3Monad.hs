@@ -48,6 +48,8 @@ incC n = undefined
 -- there. The main function, the whole point of Monad, is (>>=) (pronounced
 -- "bind"). (>>) is just a special case of (>>=) where we discard the value.
 --
+-- Monad also provides several utility functions, like (=<<), see:
+--   https://hackage.haskell.org/package/base-4.8.1.0/docs/Control-Monad.html
 
 instance Monad Ctx where
   -- Make C into an instance of Monad.
