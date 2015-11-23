@@ -142,6 +142,24 @@ main = hspec $ do
   describe "Functor.pure & Functor.(<*>) (NonDetermTree)" $
     it "aps a function on an *arbitrary* pure NonDetermTree" $
       property $ \(IntNonDetermTree a) -> correctNonDetermTree (pure mapF <*> a) == (pure mapF <*> correctNonDetermTree a)
+  describe "Monad.fmap (Ctx)" $
+    it "fmaps a function on an *arbitrary* Ctx" $
+      property $ \(IntCtx a) -> correctCtx (mapF <$> a) == (mapF <$> correctCtx a)
+  describe "Monad.pure & Monad.(<*>) (Ctx)" $
+    it "aps a function on an *arbitrary* pure Ctx" $
+      property $ \(IntCtx a) -> correctCtx (pure mapF <*> a) == (pure mapF <*> correctCtx a)
+  describe "Monad.incC" $
+    it "increments an *arbitrary* Int and puts it in a Ctx" $
+      property $ \a -> N.incC a == N.C (a + 1)
+  describe "Monad.(>>=) (Ctx)" $
+    it "binds an arbitrary Ctx a to a function" $
+      property $ \(IntCtx a) -> (a >>= N.incC) == (a >>= N.incC)
+  describe "Monad.(>>=) (Perhaps)" $
+    it "binds an arbitrary Perhaps a to a function" $
+      property $ \(PerhapsInt a) -> correctPerhaps (a >>= F.Have . (1 +)) == (correctPerhaps a >>= Have . (1 +))
+  describe "Monad.(>>=) (NonDetermTree)" $
+    it "binds an arbitrary NonDetermTree a to a function" $
+      property $ \(IntNonDetermTree a) -> correctNonDetermTree (a >>= F.Leaf . (1 +)) == (correctNonDetermTree a >>= Leaf . (1 +))
   describe "FoldTraverse.foldMap" $
     it "foldMaps an *arbitrary* Tree" $
       property $ \(IntTree a) -> foldMap Sum a == foldMap Sum (correctTree a)
@@ -170,6 +188,14 @@ data Pair a = P a a deriving (Eq, Foldable, Functor, Show, Traversable)
 data Perhaps a = Nope
                | Have a
                deriving (Eq, Foldable, Functor, Show, Traversable)
+instance Applicative Perhaps where
+  pure            = Have
+  Nope   <*> _    = Nope
+  _      <*> Nope = Nope
+  Have f <*> x    = f <$> x
+instance Monad Perhaps where
+  Nope     >>= _ = Nope
+  (Have p) >>= f = f p
 
 data Composition f g x = Compose (f (g x))
   deriving (Eq, Foldable, Functor, Show)
@@ -190,7 +216,19 @@ instance Applicative NonDetermTree where
   _       <*> EmptyND = EmptyND
   Leaf f <*> t        = fmap f t
   (Branch l r) <*> t  = Branch (l <*> t) (r <*> t)
+instance Monad NonDetermTree where
+  EmptyND      >>= _ = EmptyND
+  Leaf x       >>= f = f x
+  (Branch l r) >>= f = Branch (l >>= f) (r >>= f)
 
+data Ctx a = C a deriving (Eq, Foldable, Functor, Show)
+
+instance Applicative Ctx where
+   pure        = C
+   (C f) <*> c = fmap f c
+
+instance Monad Ctx where
+  (C c) >>= f = f c
 
 correctTree :: F.Tree a -> Tree a
 correctTree F.Empty        = Empty
@@ -215,6 +253,9 @@ correctNonDetermTree (F.Leaf a)     = Leaf a
 correctNonDetermTree (F.Branch l r) = Branch (correctNonDetermTree l)
                                              (correctNonDetermTree r)
 
+correctCtx :: N.Ctx a -> Ctx a
+correctCtx (N.C c) = C c
+
 newtype IntPair             = IntPair             (F.Pair Int)
   deriving (Eq, Show)
 newtype IntList             = IntList             (M.List Int)
@@ -232,6 +273,8 @@ newtype ComposeMaybeIntList = ComposeMaybeIntList (F.Composition Maybe [] Int)
 newtype IntZipList          = IntZipList          (F.ZipList Int)
   deriving (Eq, Show)
 newtype IntNonDetermTree    = IntNonDetermTree    (F.NonDetermTree Int)
+  deriving (Eq, Show)
+newtype IntCtx              = IntCtx              (N.Ctx Int)
   deriving (Eq, Show)
 
 instance Arbitrary IntPair where
@@ -266,6 +309,9 @@ instance Arbitrary IntZipList where
 instance Arbitrary IntNonDetermTree where
   arbitrary = IntNonDetermTree <$> arbitrary
 
+instance Arbitrary IntCtx where
+  arbitrary = IntCtx <$> arbitrary
+
 instance Arbitrary a => Arbitrary (M.Perhaps a) where
   arbitrary = mayHaps <$> arbitrary
     where mayHaps Nothing   = M.Nope
@@ -299,6 +345,9 @@ instance Arbitrary (F.NonDetermTree Int) where
             | length (correctNonDetermTree l) <=
               length (correctNonDetermTree r)  = F.Branch (insertTree x l) r
             | otherwise                        = F.Branch l (insertTree x r)
+
+instance Arbitrary (N.Ctx Int) where
+  arbitrary = N.C <$> arbitrary
 
 mapF :: Int -> Bool
 mapF = odd . (* 6)
