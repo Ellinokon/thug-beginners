@@ -66,14 +66,14 @@ solution to the problems presented.
 Presentations:   
  LessonA: https://secure.plaimi.net/~alexander/tmp/2015-10-06-thug-beginners-1.html   
 
-Suggested material for after LessonA:   
+Suggested material for LessonA:
  https://www.youtube.com/watch?v=3bjXGrycMhQ   
  http://www.iro.umontreal.ca/~monnier/2035/history.pdf   
  http://learnyouahaskell.com/starting-out   
  http://learnyouahaskell.com/syntax-in-functions   
  http://www.haskellforall.com/2013/12/equational-reasoning.html
 
-Suggested material for after LessonB:
+Suggested material for LessonB:
  http://www.haskellforall.com/2014/10/how-to-desugar-haskell-code.html
  https://wiki.haskell.org/Typeclassopedia
  http://202.3.77.10/users/karkare/courses/2010/cs653/Papers/ad-hoc-polymorphism.pdf
