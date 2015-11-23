@@ -118,8 +118,11 @@ instance (Functor f, Functor g) => Functor (Composition f g) where
 -- the result inside the same context. We can thus say that functors only
 -- cares what's inside the context, not the context itself.
 
--- But what if you have a function that's in a context itself? Then you need
--- what's called an applicative functor.
+-- But what if you have a function that's in a context itself? And more
+-- immediately practial: We can now e.g. fmap (+1) (Just 2), but what if you
+-- want to add Just 1 to Just 2?
+--
+-- Then you need what's called an applicative functor.
 --
 -- class Functor f => Applicative f where
 --   pure  :: a -> f a
@@ -133,13 +136,13 @@ instance (Functor f, Functor g) => Functor (Composition f g) where
 -- application as an operator (rather than using whitespace).
 --   f :: (a -> b) -> a -> b
 --   f $ x = f x
---
 -- What is it used for? Well, its low precedence means we can use it to
 -- eliminate parentheses.
 --   f x (g y) == f x $ g y
 --
 -- Now, do you see that (<$>) is just function application? (<$>) is exactly
--- like ($), but everything is in a computational context.
+-- like ($), but everything is in a computational context! This is very
+-- useful, as we'll soon see.
 
 -- There are some laws for applicative functors.
 --
@@ -166,6 +169,9 @@ instance (Functor f, Functor g) => Functor (Composition f g) where
 --   fmap (+) [1, 2, 3] <*> pure 10
 -- And with the (<$>) we get the more idiomatic "applicative style syntax":
 --   (+) <$> [1, 2, 3] <*> pure 10
+--
+-- Now we can finally solve the problem stated above.
+--   (+) <$> Just 1 <*> Just 2
 
 -- Now let's do some exercises using Applicative Functors. Note that all of
 -- them can be resolved in nearly a plethora of ways with regards to syntax.
