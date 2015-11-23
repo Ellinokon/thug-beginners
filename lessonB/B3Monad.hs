@@ -7,7 +7,7 @@ import B2Functor
 -- have identified yet another problem.
 
 -- Let's play with pretty much the simplest datatype imaginable.
-data Ctx a = C a deriving Show
+data Ctx a = C a deriving (Show, Eq)
 
 instance Functor Ctx where
   -- First, make it a Functor.
