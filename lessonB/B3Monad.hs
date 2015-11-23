@@ -48,8 +48,6 @@ incC n = undefined
 -- there. The main function, the whole point of Monad, is (>>=) (pronounced
 -- "bind"). (>>) is just a special case of (>>=) where we discard the value.
 --
--- Exercise: What is the type of incC . incC? Why does this not allow us to
--- compose like we want to?
 
 instance Monad Ctx where
   -- Make C into an instance of Monad.
