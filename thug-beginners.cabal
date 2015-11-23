@@ -14,7 +14,7 @@ cabal-version:         >=1.10
 
 executable a
   main-is:             Tests.hs
-  exposed-modules:     A1Nat
+  other-modules:       A1Nat
                        A2List
                        A3BreadButter
   build-depends:       base >=4.8 && <4.9,
@@ -26,7 +26,7 @@ executable a
 
 executable b
   main-is:             Tests.hs
-  exposed-modules:     B1Monoid
+  other-modules:       B1Monoid
                        B2Functor
                        B3Monad
                        B4FoldTraverse
