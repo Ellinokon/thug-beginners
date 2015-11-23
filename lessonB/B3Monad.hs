@@ -70,9 +70,9 @@ instance Monad Ctx where
 
 -- As with the other typeclasses, there are some simple rules to keep us sane:
 --
---   return a >>= k                 = k a
---   m        >>= return            = m
---   m        >>= (\x -> k x >>= h) = (m >>= k) >>= h
+--   pure a >>= k                 = k a
+--   m      >>= pure              = m
+--   m      >>= (\x -> k x >>= h) = (m >>= k) >>= h
 --
 -- Exercise: Reformulate the laws using (>=>).
 
