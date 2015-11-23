@@ -160,6 +160,9 @@ main = hspec $ do
   describe "Monad.(>>=) (NonDetermTree)" $
     it "binds an arbitrary NonDetermTree a to a function" $
       property $ \(IntNonDetermTree a) -> correctNonDetermTree (a >>= F.Leaf . (1 +)) == (correctNonDetermTree a >>= Leaf . (1 +))
+  describe "FoldTraverse.treeToList" $
+    it "sums an *arbitrary* Foldable" $
+      property $ \(IntTree a) -> T.treeToList a == toList (correctTree a)
   describe "FoldTraverse.foldMap" $
     it "foldMaps an *arbitrary* Tree" $
       property $ \(IntTree a) -> foldMap Sum a == foldMap Sum (correctTree a)
@@ -169,9 +172,6 @@ main = hspec $ do
   describe "FoldTraverse.lengthFold" $
     it "calculates the length of an *arbitrary* Foldable" $
       property $ \(IntTree a) -> T.lengthFold a == length (correctTree a)
-  describe "FoldTraverse.treeToList" $
-    it "sums an *arbitrary* Foldable" $
-      property $ \(IntTree a) -> T.treeToList a == toList (correctTree a)
   describe "FoldTraverse.foldableToList" $
     it "sums an *arbitrary* Foldable" $
       property $ \(IntTree a) -> T.foldableToList a == toList (correctTree a)

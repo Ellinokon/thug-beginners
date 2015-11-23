@@ -7,6 +7,16 @@ import Data.Monoid
 
 import B2Functor
 
+treeToList :: Tree a -> [a]
+-- Using recursion, build a [] from a Tree. It should work like this:
+--   treeToList $ Node (Node Empty 1 Empty) 2 (Node Empty 3 Empty)
+--   == [1, 2, 3]
+treeToList = undefined
+
+-- Simple enough. I could throw more boring exercises at you now, like writing
+-- the same thing for Maybe or NonDetermTree or whatever. Instead let's not.
+-- Let's instead solve it once and for all.
+--
 -- In LessonA we wrote fold, which reduced a list while applying a binary
 -- function to every member. That was useful, wasn't it? And, naturally, we
 -- may abstract it from working on lists to working on anything... as long as
@@ -66,10 +76,8 @@ sumFold = undefined
 lengthFold :: Foldable f => f a -> Int
 lengthFold = undefined
 
-treeToList :: Tree a -> [a]
-treeToList = undefined
-
 foldableToList :: Foldable f => f a -> [a]
+-- And here we get a toList for all Foldables!
 foldableToList = undefined
 
 -- Finally, we want a way to commute Functors. I.e. we want to go from
