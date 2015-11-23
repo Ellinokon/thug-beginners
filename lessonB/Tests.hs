@@ -205,7 +205,6 @@ instance Applicative ZipList where
   pure x            = Z (repeat x)
   (Z fs) <*> (Z xs) = Z (zipWith id fs xs)
 
-
 data NonDetermTree a = EmptyND
                      | Leaf a
                      | Branch (NonDetermTree a) (NonDetermTree a)
@@ -286,11 +285,6 @@ instance Arbitrary IntList where
 instance Arbitrary IntTree where
   arbitrary = IntTree <$> arbitrary
 
-instance Arbitrary a => Arbitrary (F.Perhaps a) where
-  arbitrary = mayHaps <$> arbitrary
-    where mayHaps Nothing  = F.Nope
-          mayHaps (Just x) = F.Have x
-
 instance Arbitrary PerhapsInt where
   arbitrary = PerhapsInt <$> arbitrary
 
@@ -330,6 +324,11 @@ instance Arbitrary a => Arbitrary (F.Tree a) where
             | length (correctTree l) <=
               length (correctTree r)  = F.Node (insertTree x l) n r
             | otherwise               = F.Node l n (insertTree x r)
+
+instance Arbitrary a => Arbitrary (F.Perhaps a) where
+  arbitrary = mayHaps <$> arbitrary
+    where mayHaps Nothing  = F.Nope
+          mayHaps (Just x) = F.Have x
 
 instance Arbitrary (F.Composition Maybe [] Int) where
   arbitrary = (F.Compose . Just . pure) <$> arbitrary
