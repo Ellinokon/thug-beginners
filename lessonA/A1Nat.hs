@@ -191,8 +191,8 @@ minNat (S x) (S y) = undefined
 
 maxNat :: Nat -> Nat -> Nat
 -- And now the maximum.
-maxNat Z y         = undefined
-maxNat x Z         = undefined
+maxNat Z     y     = undefined
+maxNat x     Z     = undefined
 maxNat (S x) (S y) = undefined
 
 instance Ord Nat where
