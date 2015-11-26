@@ -37,10 +37,10 @@ instance Eq Nat where
   -- out the code yourself. (==) has the type a -> a -> Bool, where 'a' is an
   -- instance of Eq. Here we are going to define how Nat is an instance of Eq.
   -- So here it effectively has the type Nat -> Nat -> Bool.
-  Z     == Z     = undefined -- Is Z (zero) equal to Z?
-  (S x) == (S y) = undefined -- Is one number equal to a different number?
+  Z     == Z     = True      -- Is Z (zero) equal to Z?
+  (S x) == (S y) = x == y    -- Is one number equal to a different number?
                              -- Hint: Use recursion!
-  _     == _     = undefined -- This is what we call the base case, or the
+  _     == _     = False     -- This is what we call the base case, or the
                              -- catch all. '_' means we don't bind the value
                              -- to a variable at all.
 
@@ -96,9 +96,9 @@ instance Eq Nat where
 isZ :: Nat -> Bool
 -- We'll start off with a very simple function -- isZ. Is the argument given
 -- in Zero?
-isZ Z = undefined -- As you can see, I'm really spoonfeeding you here.
+isZ Z = True      -- As you can see, I'm really spoonfeeding you here.
                   -- Is Z equal to Z, do you think?
-isZ _ = undefined -- Another base case, because we only care about Z.
+isZ _ = False     -- Another base case, because we only care about Z.
 
 toNat :: Int -> Nat
 -- Now let's make add some Int interop.
@@ -119,81 +119,81 @@ toNat :: Int -> Nat
 -- And so on.
 --
 -- Numbers below 0 should result in Z.
-toNat n | n > 0     = undefined
-        | otherwise = undefined
+toNat n | n > 0     = S (toNat (n - 1))
+        | otherwise = Z
 
 fromNat :: Nat -> Int
 -- Now let's go the other way around. Here we don't have to worry about n < Z,
 -- because that can't happen.
-fromNat Z     = undefined
-fromNat (S n) = undefined
+fromNat Z     = 0
+fromNat (S n) = 1 + (fromNat n)
 
 predNat :: Nat -> Nat
 -- predNat takes a Nat and gives us its predecessor.
 --
 --   predNat S (S (S N)) = S (S N)
 -- Like that. Remember that our number system doesn't go any lower than Z.
-predNat Z     = undefined
-predNat (S n) = undefined
+predNat Z     = Z
+predNat (S n) = n
 
 succNat :: Nat -> Nat
 -- And here's the successor function for symmetry. Hint: if you think it's too
 -- simple to be true, you probably have the answer to this one.
-succNat = undefined
+succNat = S
 
 plus :: Nat -> Nat -> Nat
 -- And now some classic arithmetic. Let's start out with addition.
 -- Hint: Recursion! Of course recursion. Always recursion.
-Z     `plus` y = undefined
-(S x) `plus` y = undefined
+Z     `plus` y = y
+(S x) `plus` y = S (x `plus` y)
 
 times :: Nat -> Nat -> Nat
 -- Next up is multiplication.
-Z     `times` _ = undefined
-(S x) `times` y = undefined -- Hint: You probably want to use plus here.
+Z     `times` _ = Z
+(S x) `times` y = y `plus` (x `times` y) -- Hint: You probably want to use plus here.
 
 powerOf :: Nat -> Nat -> Nat
 -- Power of. The first argument is the base case, the second is the exponent.
-_ `powerOf` Z     = undefined
-b `powerOf` (S e) = undefined
+_ `powerOf` Z     = S Z
+b `powerOf` (S e) = b `times` (b `powerOf` e)
 
 minus :: Nat -> Nat -> Nat
 -- Subtraction.
-Z     `minus` _     = undefined
-x     `minus` Z     = undefined
-(S x) `minus` (S y) = undefined
+Z     `minus` _     = Z
+x     `minus` Z     = x
+(S x) `minus` (S y) = x `minus` y
 
 lteNat :: Nat -> Nat -> Bool
 -- Moving onto ordering. This is the less-than-or-equal-to function for Nats.
 -- Is the left-hand side argument (lhs) smaller than or equal to the
 -- right-hand side (rhs) argument?
-Z     `lteNat` y     = undefined
-x     `lteNat` Z     = undefined
-(S x) `lteNat` (S y) = undefined
+Z     `lteNat` y     = True
+x     `lteNat` Z     = False
+(S x) `lteNat` (S y) = x `lteNat` y
 
 ltNat :: Nat -> Nat -> Bool
 -- The less-than function. Hint: You probably want to use lteNat and succNat.
-ltNat x y = undefined
+ltNat x y = (succNat x) `lteNat` y
 
 gteNat :: Nat -> Nat -> Bool
 -- The greater-than-or-equal-to function. Hint: Reuse!
-gteNat x y = undefined
+gteNat x y = y `lteNat` x
 
 gtNat :: Nat -> Nat -> Bool
 -- The greater-than function.
-gtNat x y = undefined
+gtNat x y = y `ltNat` x
 
 minNat :: Nat -> Nat -> Nat
 -- The minimum function. Given two Nats, which is the smallest one?
-minNat Z     _     = undefined
-minNat _     Z     = undefined
-minNat (S x) (S y) = undefined
+minNat Z     _     = Z
+minNat _     Z     = Z
+minNat (S x) (S y) = S (minNat x y)
 
 maxNat :: Nat -> Nat -> Nat
 -- And now the maximum.
-maxNat Z     y     = undefined
-maxNat x     Z     = undefined
-maxNat (S x) (S y) = undefined
+maxNat Z     y     = y
+maxNat x     Z     = x
+maxNat (S x) (S y) = S (maxNat x y)
 
 instance Ord Nat where
   -- Of course all those order functions could be given to us a lot more
@@ -204,10 +204,10 @@ instance Ord Nat where
   -- Compare takes two Nats and returns one of three values: EQ, LT or GT. EQ
   -- means that the values are equal, LT that lhs is smaller than rhs, and GT
   -- the opposite of LT.
-  compare Z Z         = undefined
-  compare Z (S y)     = undefined
-  compare (S x) Z     = undefined
-  compare (S x) (S y) = undefined
+  compare Z Z         = EQ
+  compare Z (S y)     = LT
+  compare (S x) Z     = GT
+  compare (S x) (S y) = compare x y
   -- Of course, while we're being honest here, we don't *really* have to do
   -- *any* of this. We can just derive Ord for completely free, like we did
   -- with Show. But it was a fun exercise, right? The functions you get from
@@ -222,8 +222,8 @@ fact :: Nat -> Nat
 -- Or, if we used Ints it would look like this.
 --   fact 3 = 6
 -- Because 1 * 2 * 3 = 6. Get it? Good. Now implement it!
-fact Z     = undefined
-fact (S n) = undefined
+fact Z     = S Z
+fact (S n) = (S n) `times` (fact n)
 
 fib :: Nat -> Nat
 -- No tutorial is complete without "Hallo, world!". But in functional
@@ -238,6 +238,6 @@ fib :: Nat -> Nat
 --   fib 1 = 1
 --
 -- Now you give it a go, using our Nat type.
-fib Z         = undefined
-fib (S Z)     = undefined
-fib (S (S n)) = undefined
+fib Z         = Z
+fib (S Z)     = S Z
+fib (S (S n)) = (fib (S n)) `plus` (fib n)
